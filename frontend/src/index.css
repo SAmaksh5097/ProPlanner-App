@@ -1,1 +1,45 @@
-@import 'tailwindcss'
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+html, body, #root{
+    height: 100%;
+    scroll-behavior: smooth;
+}
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  
+  }
+}
+
+@layer base {
+  :root {
+    /* Standard properties for Firefox */
+    scrollbar-width: thin;
+    scrollbar-color: #94a3b8 transparent;
+  }
+
+  /* Webkit browsers (Chrome, Safari, Edge) */
+  ::-webkit-scrollbar {
+    width: 8px; /* Width of the vertical scrollbar */
+    height: 8px; /* Height of the horizontal scrollbar */
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent; /* Makes the track invisible */
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: #94a3b8; /* Slate-400 color */
+    border-radius: 20px; /* Rounded pill shape */
+    border: 2px solid transparent; /* Creates padding effect */
+    background-clip: content-box;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #64748b; /* Slate-500 on hover */
+  }
+}
