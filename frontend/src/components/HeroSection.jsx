@@ -1,6 +1,22 @@
-import React from 'react';
+import React, { useEffect,useState } from 'react';
 
+const texts = ["pro 😎", "legend 🚀", "G.O.A.T 🗿"]
 const HeroSection = () => {
+  const [index, setIndex] = useState(0);
+  const [fade, setFade] = useState(true);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setFade(false);
+
+      setTimeout(() => {
+        setIndex((prev) => (prev + 1) % texts.length);
+        setFade(true);
+      }, 300);
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <section className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-white dark:bg-slate-950 transition-colors duration-300">
       
@@ -21,7 +37,7 @@ const HeroSection = () => {
 
             {/* Sub-heading */}
             <p className="text-lg lg:text-xl text-slate-600 dark:text-slate-400 mb-8 leading-relaxed max-w-lg transition-colors duration-300">
-              Plan your Projects like a Pro 😎
+              Plan your Projects like a <span className={`transition-opacity duration-500  ease-in-out text-xl font-bold ${fade?"opacity-100":"opacity-0"} `}>{texts[index]}</span>
               <br />
               No more chaos, just clear, actionable plans to get your projects done efficiently.
             </p>
