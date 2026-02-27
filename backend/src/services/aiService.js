@@ -13,12 +13,13 @@ const genAI = new GoogleGenerativeAI({
  */
 const generateProjectPlan = async (projectData) => {
     try {
-        const { title, description, techStack, deadline } = projectData;
+        const { title, description, tech_stack, deadline } = projectData;
 
         // Calculate roughly how many days we have until the deadline
         const daysUntilDeadline = Math.ceil((new Date(deadline) - new Date()) / (1000 * 60 * 60 * 24));
         const plannedDays = daysUntilDeadline > 0 ? daysUntilDeadline : 7; // Default to 7 days if deadline is weird
-
+        const techStackArray = Array.isArray(tech_stack) ? tech_stack : [tech_stack];
+        
         // We use gemini-1.5-flash because it is incredibly fast and great at JSON tasks
         const model = genAI.getGenerativeModel({ 
             model: "gemini-1.5-flash",
@@ -35,7 +36,7 @@ const generateProjectPlan = async (projectData) => {
 
             Project Title: ${title}
             Description: ${description}
-            Tech Stack: ${techStack.join(', ')}
+            Tech Stack: ${techStackArray.join(', ')}
             Total Days Available: ${plannedDays}
 
             Instructions:
@@ -45,7 +46,7 @@ const generateProjectPlan = async (projectData) => {
             4. Assign a realistic time estimate to each task (e.g., "1.5 hrs", "45 mins").
             5. Return the response STRICTLY as a JSON array of objects matching the exact structure below.
 
-            Expected JSON Structure:
+            Return strict JSON in exact format....do not skip any fields:
             [
               {
                 "dayNumber": 1,

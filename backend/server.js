@@ -4,6 +4,8 @@ const connectDB = require('./src/config/db');
 const cors = require('cors');
 const {clerkMiddleware, requireAuth} = require('@clerk/express');
 dotenv = require('dotenv');
+const projectRoutes = require('./src/routes/projectRoutes');
+
 const PORT = process.env.PORT || 5000;
 dotenv.config();
 app.use(cors({
@@ -11,9 +13,10 @@ app.use(cors({
   credentials: true
 }));
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({extended:false}));
 app.use(clerkMiddleware());
 
+app.use('/projects', projectRoutes);
 
 // connect to database
 connectDB().then(()=>{
