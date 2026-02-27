@@ -1,5 +1,5 @@
 import React, { useEffect,useState } from 'react';
-
+import { Link } from 'react-router-dom'; 
 const texts = ["pro 😎", "legend 🚀", "G.O.A.T 🗿"]
 const HeroSection = () => {
   const [index, setIndex] = useState(0);
@@ -44,9 +44,11 @@ const HeroSection = () => {
 
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 mb-10">
-              <button className="px-8 py-3.5 rounded-full bg-blue-600 text-white font-semibold shadow-lg shadow-blue-600/20 hover:bg-blue-700 transition-colors">
-                Create Plan
-              </button>
+              <Link to={'/user-dashboard'}>
+                <button className="px-8 py-3.5 rounded-full bg-blue-600 text-white font-semibold shadow-lg shadow-blue-600/20 hover:bg-blue-700 transition-colors">
+                  Create Plan
+                </button>
+              </Link>
             </div>
 
             {/* Social Proof */}

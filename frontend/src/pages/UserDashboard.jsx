@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import ProjectCard from '../components/ProjectCard';
-
+import { Link } from 'react-router-dom';
+import { PlusCircle } from 'lucide-react';
 const mockProjects = [
   {
     id: 1,
@@ -47,18 +48,20 @@ const UserDashboard = () => {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
           <div>
             <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-1 tracking-tight transition-colors">
-              Good morning, (User)! Here are your projects.
+              Good morning, {'User'}! Here are your projects.
             </h1>
             <p className="text-slate-500 dark:text-slate-400 text-lg transition-colors">
               Manage your ongoing development pipelines and architectural plans
             </p>
           </div>
-          <button className="inline-flex items-center px-5 py-2.5 bg-blue-600 text-white font-semibold rounded-full hover:bg-blue-700 shadow-sm transition-colors whitespace-nowrap">
-            <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-            </svg>
-            Create New Plan
-          </button>
+          <div>
+            <Link to={'/create-project'}>
+              <button className='flex gap-1 items-center bg-blue-600 text-white px-2 py-2 rounded-md hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 font-medium transition-colors cursor-pointer'>
+                <PlusCircle/>
+                <h1>Start new project</h1>
+              </button>
+            </Link>
+          </div>
         </div>
 
         <div className="border-b border-slate-200 dark:border-slate-800 mb-8 transition-colors">
