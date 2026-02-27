@@ -1,29 +1,77 @@
-import React from 'react'
-import Home from './pages/Home'
-import Navbar from './components/Navbar'
-import Footer from './components/Footer'
-import UserDashboard from './pages/UserDashboard'
-import PlanDashboard from './pages/PlanDashboard'
-import CreateProject from './pages/CreateProject'
+// src/App.jsx
+import React from 'react';
+import { Route, Routes } from 'react-router-dom';
+import { SignedIn, SignedOut, RedirectToSignIn } from '@clerk/clerk-react'; // <-- Import these
+
+import Home from './pages/Home';
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
+import UserDashboard from './pages/UserDashboard';
+import PlanDashboard from './pages/PlanDashboard';
+import CreateProject from './pages/CreateProject';
+
+const ProtectedRoute = ({ children }) => {
+  return (
+    <>
+      <SignedIn>
+        {children} 
+      </SignedIn>
+      <SignedOut>
+        <RedirectToSignIn /> 
+      </SignedOut>
+    </>
+  );
+};
 
 const App = () => {
   return (
-    <div className='bg-gray-100 min-h-screen w-screen dark:bg-gray-900 dark:text-white'>
-      <div>
-        <Navbar/>
-      </div>
-      <div>
-        {/* <UserDashboard/> */}
-        {/* <PlanDashboard/> */}
-        <CreateProject/>
-      </div>
-      <div>
-        <Footer/>
-      </div>
-      {/* <Home/> */}
+    <div className='bg-gray-100 min-h-screen w-full flex flex-col dark:bg-gray-900 dark:text-white transition-colors duration-300'>
+      
+      <Navbar />
+      
+      <main className='flex-grow'>
+        <Routes>
+          {/* Public Route - Anyone can see the landing page */}
+          <Route path='/' element={<Home />} />
+          
+          {/* Protected Routes - Wrap the element in <ProtectedRoute> */}
+          <Route 
+            path='/user-dashboard' 
+            element={
+              <ProtectedRoute>
+                <UserDashboard />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path='/plan-dashboard' 
+            element={
+              <ProtectedRoute>
+                <PlanDashboard />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path='/create-project' 
+            element={
+              <ProtectedRoute>
+                <CreateProject />
+              </ProtectedRoute>
+            } 
+          />
+          
+          {/* 404 Route */}
+          <Route 
+            path='*' 
+            element={<div className="flex items-center justify-center h-full mt-20 text-2xl font-bold">404 - Page Not Found</div>} 
+          />
+        </Routes>
+      </main>
+      
+      <Footer />
       
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
