@@ -2,7 +2,7 @@ import React from 'react';
 import {LaptopMinimalCheck} from 'lucide-react'
 const Footer = () => {
   return (
-    <footer className="bg-white dark:bg-slate-950 border-t border-slate-100 dark:border-slate-800 transition-colors duration-300">
+    <footer className=" bg-white dark:bg-slate-950 border-t border-slate-100 dark:border-slate-800 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-5 py-2">
         
         {/* Top Row: Logo & Links */}

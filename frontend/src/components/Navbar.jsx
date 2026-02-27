@@ -4,7 +4,7 @@ import ThemeToggle from './ThemeToggle'
 import {SignInButton, SignUpButton} from '@clerk/clerk-react'
 const Navbar = () => {
   return (
-    <div className=' text-black bg-gray-100  flex items-center justify-between shadow-xl p-4 dark:bg-gray-800 dark:text-white'>
+    <div className=' w-full text-black bg-gray-100  flex items-center justify-between shadow-xl p-4 dark:bg-gray-800 dark:text-white'>
         <div className='flex gap-2 text-2xl font-bold items-center '>
             <LaptopMinimalCheck className='w-10 h-10' />
             <h1 >ProPlanner</h1>
