@@ -66,7 +66,7 @@ const UserDashboard = () => {
         >
           <div>
             <div className="flex items-center gap-3 mb-1">
-              <h1 className="text-3xl font-extrabold text-brand-dark dark:text-brand-light tracking-tight">
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-brand-dark dark:text-brand-light tracking-tight">
                 Welcome back, Developer!
               </h1>
             </div>
@@ -93,7 +93,7 @@ const UserDashboard = () => {
           transition={{ delay: 0.2, duration: 0.4 }}
           className="border-b border-brand-muted/30 dark:border-brand-muted/10 mb-8 flex justify-between items-center"
         >
-          <nav className="flex space-x-8">
+          <nav className="flex space-x-4 sm:space-x-8">
             {['Ongoing', 'Completed'].map((tab) => (
               <button
                 key={tab}

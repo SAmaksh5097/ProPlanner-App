@@ -47,7 +47,7 @@ const Features = () => {
   return (
     <section  
       id="features" 
-      className="min-h-screen w-full flex flex-col justify-center py-20 bg-brand-light dark:bg-brand-dark transition-colors duration-300"
+      className="min-h-screen w-full flex flex-col justify-center py-12 sm:py-20 bg-brand-light dark:bg-brand-dark transition-colors duration-300"
     >
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
@@ -59,7 +59,7 @@ const Features = () => {
           transition={{ duration: 0.6 }}
           className="text-center max-w-2xl mx-auto mb-16"
         >
-          <h2 className="text-3xl md:text-4xl font-extrabold text-brand-dark dark:text-brand-light mb-4 tracking-tight">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-brand-dark dark:text-brand-light mb-4 tracking-tight">
             Streamline Your <span className="text-brand-accent">Workflow</span>
           </h2>
           <p className="text-lg text-brand-dark/60 dark:text-brand-muted">
@@ -78,7 +78,7 @@ const Features = () => {
               whileInView="visible"
               viewport={{ once: true, margin: '-50px' }}
               whileHover={{ y: -8, transition: { duration: 0.3 } }}
-              className="p-8 rounded-2xl bg-white dark:bg-brand-surface-dark border border-brand-muted/20 dark:border-brand-muted/10 hover:border-brand-accent/40 dark:hover:border-brand-accent/30 transition-colors duration-300 shadow-sm hover:shadow-lg hover:shadow-brand-accent/10"
+              className="p-5 sm:p-8 rounded-2xl bg-white dark:bg-brand-surface-dark border border-brand-muted/20 dark:border-brand-muted/10 hover:border-brand-accent/40 dark:hover:border-brand-accent/30 transition-colors duration-300 shadow-sm hover:shadow-lg hover:shadow-brand-accent/10"
             >
               {/* Icon Container */}
               <div className="w-12 h-12 rounded-xl bg-brand-accent/10 dark:bg-brand-accent/15 text-brand-accent flex items-center justify-center mb-6">

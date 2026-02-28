@@ -94,7 +94,7 @@ const ProjectDashboard = () => {
             transition={{ delay: 0.2, duration: 0.4 }}
             className="flex items-center justify-between mb-6"
           >
-            <h2 className="text-2xl font-bold text-brand-dark dark:text-brand-light">
+            <h2 className="text-xl sm:text-2xl font-bold text-brand-dark dark:text-brand-light">
               AI Roadmap Schedule
             </h2>
           </motion.div>
@@ -109,7 +109,7 @@ const ProjectDashboard = () => {
       transition={{ delay: i * 0.1, duration: 0.5 }}
       className="bg-white dark:bg-brand-surface-dark rounded-2xl p-6 border border-brand-muted/20 dark:border-brand-muted/10 shadow-sm"
     >
-      <h3 className="text-xl font-bold text-brand-dark dark:text-brand-light mb-4">
+      <h3 className="text-lg sm:text-xl font-bold text-brand-dark dark:text-brand-light mb-4">
         Day {day.dayNumber}
       </h3>
       

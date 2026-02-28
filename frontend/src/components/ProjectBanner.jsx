@@ -48,7 +48,7 @@ const ProjectBanner = ({ projectMeta }) => {
         
         {/* Left side: Project Info */}
         <div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-brand-dark dark:text-brand-light mb-3">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-brand-dark dark:text-brand-light mb-3">
             {projectMeta.title}
           </h1>
           <div className="flex items-center text-brand-muted font-medium">
