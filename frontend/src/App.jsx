@@ -1,13 +1,12 @@
-// src/App.jsx
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { SignedIn, SignedOut, RedirectToSignIn } from '@clerk/clerk-react'; // <-- Import these
+import { SignedIn, SignedOut, RedirectToSignIn } from '@clerk/clerk-react';
 
 import Home from './pages/Home';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import UserDashboard from './pages/UserDashboard';
-import PlanDashboard from './pages/PlanDashboard';
+import ProjectDashboard from './pages/ProjectDashboard';
 import CreateProject from './pages/CreateProject';
 
 const ProtectedRoute = ({ children }) => {
@@ -44,10 +43,10 @@ const App = () => {
             } 
           />
           <Route 
-            path='/plan-dashboard' 
+            path='/project-dashboard/:id' 
             element={
               <ProtectedRoute>
-                <PlanDashboard />
+                <ProjectDashboard />
               </ProtectedRoute>
             } 
           />
