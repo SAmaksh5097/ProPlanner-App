@@ -14,13 +14,13 @@ const UserDashboard = () => {
   const [loading, setLoading] = useState(true);
   const { getToken, user } = useAuth();
   const navigate = useNavigate();
-
+  const API_URL = import.meta.env.VITE_API_URL;
   
   useEffect(() => {
     const fetchProjects = async () => {
       try {
         const token = await getToken();
-        const response = await axios.get('http://localhost:5000/projects/my-projects', {
+        const response = await axios.get(`${API_URL}/projects/my-projects`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         if(Array.isArray(response.data)){

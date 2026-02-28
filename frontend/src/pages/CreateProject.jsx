@@ -23,6 +23,7 @@ import { useNavigate } from 'react-router-dom';
 import {useAuth} from '@clerk/clerk-react';
 import axios from 'axios';
 
+
 // Organized Tech Options
 const techCategories = {
   Frontend: ['React', 'Next.js', 'Vue.js', 'Angular', 'Svelte', 'Tailwind CSS'],
@@ -72,6 +73,8 @@ const CreateProject = () => {
     });
   };
 
+  const API_URL = import.meta.env.VITE_API_URL;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true)
@@ -85,7 +88,7 @@ const CreateProject = () => {
         deadline: formData.deadline
       };
 
-      const response = await axios.post('http://localhost:5000/projects/create',payload,{
+      const response = await axios.post(`${API_URL}/projects/create`,payload,{
         headers:{Authorization: `Bearer ${token}`}
       })
 
