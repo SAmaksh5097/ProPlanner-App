@@ -23,7 +23,7 @@ const ProjectBanner = ({ projectMeta }) => {
 
     try{
       const token = await getToken();
-      const response = await axios.delete(`http://localhost:5000/projects/${id}`,{
+      const response = await axios.delete(`${import.meta.env.VITE_API_URL}/projects/${id}`,{
         headers: { Authorization: `Bearer ${token}` }
       })
     } catch(error){

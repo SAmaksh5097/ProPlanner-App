@@ -57,7 +57,7 @@ const ProjectDashboard = () => {
   try {
     const token = await getToken();
     
-    const response = await axios.patch('http://localhost:5000/projects/toggle-task', {
+    const response = await axios.patch(`${API_URL}/projects/toggle-task`, {
       projectId: id,
       dayNumber,
       taskTitle
