@@ -34,8 +34,12 @@ const generateProjectPlan = async (projectData) => {
         });
 
         // The new SDK returns response.text (as a string)
-        // We parse it to turn it into an object for MongoDB
-        return JSON.parse(response.text);
+        // Strip markdown fences if the model wraps it in ```json ... ```
+        let text = response.text;
+        if (text.includes('```')) {
+            text = text.replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
+        }
+        return JSON.parse(text);
 
     } catch (error) {
         console.error("AI Generation Error:", error);
