@@ -1,45 +1,54 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ProjectCard from '../components/ProjectCard';
 import { Link } from 'react-router-dom';
-import { PlusCircle } from 'lucide-react';
-const mockProjects = [
-  {
-    id: 1,
-    title: 'Mobile App Redesign',
-    tags: ['React Native', 'Firebase'],
-    progress: 65,
-    badgeText: 'High Priority',
-    badgeColor: 'text-amber-700 bg-amber-100 dark:text-amber-400 dark:bg-amber-900/30',
-    iconColor: 'text-blue-600 bg-blue-100 dark:text-blue-400 dark:bg-blue-900/30',
-    dueDate: 'Due in 5 days',
-    progressColor: 'bg-blue-500 dark:bg-blue-400',
-  },
-  {
-    id: 2,
-    title: 'E-commerce Backend',
-    tags: ['Node.js', 'PostgreSQL', 'Redis'],
-    progress: 42,
-    badgeText: 'Internal',
-    badgeColor: 'text-slate-600 bg-slate-100 dark:text-slate-300 dark:bg-slate-800',
-    iconColor: 'text-emerald-600 bg-emerald-100 dark:text-emerald-400 dark:bg-emerald-900/30',
-    dueDate: 'Due in 12 days',
-    progressColor: 'bg-emerald-500 dark:bg-emerald-400',
-  },
-  {
-    id: 3,
-    title: 'Analytics Dashboard',
-    tags: ['Next.js', 'Tailwind CSS'],
-    progress: 88,
-    badgeText: 'Critical',
-    badgeColor: 'text-rose-700 bg-rose-100 dark:text-rose-400 dark:bg-rose-900/30',
-    iconColor: 'text-purple-600 bg-purple-100 dark:text-purple-400 dark:bg-purple-900/30',
-    dueDate: 'Due in 2 days',
-    progressColor: 'bg-purple-500 dark:bg-purple-400',
-  },
-];
+import { PlusCircle, Plus,  Clock, CheckCircle2, Loader2 } from 'lucide-react';
+import {useAuth} from '@clerk/clerk-react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
 
 const UserDashboard = () => {
   const [activeTab, setActiveTab] = useState('Ongoing');
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const { getToken, user } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const token = await getToken();
+        // Updated to the standard route we used in the backend
+        const response = await axios.get('http://localhost:5000/projects/my-projects', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        if(Array.isArray(response.data)){
+          setProjects(response.data);
+        }else{
+          setProjects([]);
+        }
+      } catch (error) {
+        console.error("Error fetching projects", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProjects();
+  }, [getToken]);
+
+  const filteredProjects = projects.filter(project => {
+    if (activeTab === 'Ongoing') return project.progress < 100;
+    if (activeTab === 'Completed') return project.progress === 100;
+    return true;
+  });
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-slate-50 dark:bg-slate-950">
+        <Loader2 className="animate-spin text-blue-600" size={48} />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pt-10 pb-20 transition-colors duration-300">
@@ -47,59 +56,69 @@ const UserDashboard = () => {
         
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
           <div>
-            <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-1 tracking-tight transition-colors">
-              Good morning, {'User'}! Here are your projects.
-            </h1>
-            <p className="text-slate-500 dark:text-slate-400 text-lg transition-colors">
-              Manage your ongoing development pipelines and architectural plans
+            <div className="flex items-center gap-3 mb-1">
+              <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+                Welcome back, {user?.firstName || 'Developer'}! 
+              </h1>
+            </div>
+            <p className="text-slate-500 dark:text-slate-400 text-lg">
+              Manage your AI-generated development pipelines.
             </p>
           </div>
-          <div>
-            <Link to={'/create-project'}>
-              <button className='flex gap-1 items-center bg-blue-600 text-white px-2 py-2 rounded-md hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 font-medium transition-colors cursor-pointer'>
-                <PlusCircle/>
-                <h1>Start new project</h1>
-              </button>
-            </Link>
-          </div>
+          
+          <Link to='/create-project'>
+            <button className='flex gap-2 items-center bg-blue-600 text-white px-5 py-3 rounded-xl hover:bg-blue-700 shadow-lg shadow-blue-500/30 font-bold transition-all active:scale-95'>
+              <Plus size={20}/>
+              <span>Start New Project</span>
+            </button>
+          </Link>
         </div>
 
-        <div className="border-b border-slate-200 dark:border-slate-800 mb-8 transition-colors">
+        <div className="border-b border-slate-200 dark:border-slate-800 mb-8 flex justify-between items-center">
           <nav className="flex space-x-8">
-            <button
-              onClick={() => setActiveTab('Ongoing')}
-              className={`pb-4 px-1 border-b-2 font-medium text-sm flex items-center transition-colors ${
-                activeTab === 'Ongoing'
-                  ? 'border-blue-600 text-blue-600 dark:text-blue-400 dark:border-blue-500'
-                  : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 hover:border-slate-300 dark:hover:border-slate-700'
-              }`}
-            >
-              <svg className="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
-              Ongoing
-            </button>
-            <button
-              onClick={() => setActiveTab('Completed')}
-              className={`pb-4 px-1 border-b-2 font-medium text-sm flex items-center transition-colors ${
-                activeTab === 'Completed'
-                  ? 'border-blue-600 text-blue-600 dark:text-blue-400 dark:border-blue-500'
-                  : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 hover:border-slate-300 dark:hover:border-slate-700'
-              }`}
-            >
-              <svg className="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              Completed
-            </button>
+            {['Ongoing', 'Completed'].map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`pb-4 px-1 border-b-2 font-bold text-sm flex items-center transition-all ${
+                  activeTab === tab
+                    ? 'border-blue-600 text-blue-600 dark:text-blue-400 dark:border-blue-500'
+                    : 'border-transparent text-slate-500 hover:text-slate-700'
+                }`}
+              >
+                {tab === 'Ongoing' ? (
+                  <Clock className="w-4 h-4 mr-2" />
+                ) : (
+                  <CheckCircle2 className="w-4 h-4 mr-2" />
+                )}
+                {tab}
+              </button>
+            ))}
           </nav>
+          <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+            {filteredProjects.length} Projects
+          </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {mockProjects.map((project) => (
-            <ProjectCard key={project.id} project={project} />
-          ))}
-        </div>
+        {/* Projects Grid */}
+        {filteredProjects.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-20 bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-100 dark:border-slate-800">
+             <div className="p-4 bg-slate-50 dark:bg-slate-800 rounded-full mb-4 text-slate-300">
+                <PlusCircle size={40} />
+             </div>
+             <p className="text-slate-500 font-medium">No {activeTab.toLowerCase()} projects found.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredProjects?.map((project) => (
+              <ProjectCard 
+                key={project._id} 
+                project={project} 
+                onClick={() => navigate(`/project-dashboard/${project._id}`)} 
+              />
+            ))}
+          </div>
+        )}
 
       </div>
     </div>

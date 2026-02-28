@@ -7,9 +7,6 @@ const ProjectBanner = ({ projectMeta }) => {
         
         {/* Left side: Project Info */}
         <div>
-          <p className="text-xs font-bold tracking-widest text-slate-400 dark:text-slate-500 uppercase mb-3">
-            {projectMeta.breadcrumbs}
-          </p>
           <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white mb-3">
             {projectMeta.title}
           </h1>

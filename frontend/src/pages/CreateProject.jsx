@@ -9,8 +9,13 @@ import {
   CircleHelp,
   ChevronDown,
   X,
-  Check
+  Check,
+  Loader2
 } from 'lucide-react';
+
+import { useNavigate } from 'react-router-dom';
+import {useAuth} from '@clerk/clerk-react';
+import axios from 'axios';
 
 // Organized Tech Options
 const techCategories = {
@@ -47,6 +52,10 @@ const CreateProject = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const navigate = useNavigate();
+  const {getToken} = useAuth();
+  const [loading,setLoading] = useState(false);
+
   const toggleTech = (tech) => {
     setFormData((prev) => {
       const isSelected = prev.techStack.includes(tech);
@@ -57,11 +66,41 @@ const CreateProject = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form submitted to AI:', formData);
-    // POST request to Express goes here
-  };
+    setLoading(true)
+    
+    try{
+      const token = await getToken();
+      const payload = {
+        title: formData.title,
+        description: formData.description,
+        tech_stack: formData.techStack,
+        deadline: formData.deadline
+      };
+
+      const response = await axios.post('http://localhost:5000/projects/create',payload,{
+        headers:{Authorization: `Bearer ${token}`}
+      })
+
+      if(response.status === 201){
+        console.log("Project created",response.data);
+        alert("Project created successfully!")
+        navigate('/user-dashboard')
+      }
+      else if(response.status === 401){
+        alert("Unauthorized. Please log in again.");
+      }
+      else if(response.status === 500){
+        alert("Server error. Please try again later.");
+      }
+    } catch(error){
+      console.error("Error creating project",error);
+    } finally{
+      setLoading(false);
+    }
+
+  }
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col items-center pt-12 pb-24 px-4 sm:px-6 lg:px-8 transition-colors duration-300">
@@ -195,8 +234,17 @@ const CreateProject = () => {
               className="w-full py-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-lg flex items-center justify-center gap-2 shadow-lg shadow-blue-500/30 transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={formData.techStack.length === 0 || !formData.title || !formData.deadline}
             >
-              <Zap className="w-5 h-5 text-blue-200 fill-current" />
-              Generate Plan
+              {loading? (
+                <>
+                  <Loader2 className="w-5 h-5 text-blue-200 fill-current animate-spin" />
+                  Generating...
+                </>
+              ):(
+                <>
+                  <Zap className="w-5 h-5 text-blue-200 fill-current" />
+                  Generate Plan
+                </>
+              )}
             </button>
           </div>
         </form>
