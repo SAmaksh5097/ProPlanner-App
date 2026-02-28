@@ -1,7 +1,52 @@
 import React from 'react';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
+import { useAuth } from '@clerk/clerk-react';
+import { useNavigate } from 'react-router-dom';
+import { Loader2 } from 'lucide-react';
 
 const ProjectBanner = ({ projectMeta }) => {
+  const navigate = useNavigate();
+  const {id} = useParams();
+  const [loading, setLoading] = React.useState(false);
+
+
+  const { getToken } = useAuth();
+
+
+  const handleDelete = async ()=>{
+    if(!window.confirm("Are you sure you want to delete this project? This action cannot be undone.")){
+      return;
+    }
+    setLoading(true)
+
+    try{
+      const token = await getToken();
+      const response = await axios.delete(`http://localhost:5000/projects/${id}`,{
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      // if(response.status === 200){
+      //   alert("Project deleted successfully");
+      // } else{
+      //   alert("Failed to delete project");
+      // }
+    } catch(error){
+      console.log("Error deleting project",error);
+    } finally{
+      setLoading(false);
+      navigate('/user-dashboard');
+    }
+  }
+
+
+  if(loading){
+    return (
+      <Loader2/>
+    )
+  }
+
   return (
+    
     <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 mb-10 shadow-sm transition-colors duration-300">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         
@@ -31,6 +76,9 @@ const ProjectBanner = ({ projectMeta }) => {
           </div>
         </div>
         
+      </div>
+      <div>
+        <button className="text-white  font-medium shadow-md  rounded-md p-2 bg-red-600 mt-2 cursor-pointer hover:bg-red-800" onClick={handleDelete}>Delete Project</button>
       </div>
     </div>
   );

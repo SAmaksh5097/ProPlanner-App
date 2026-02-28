@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import ProjectCard from '../components/ProjectCard';
 import { Link } from 'react-router-dom';
-import { PlusCircle, Plus,  Clock, CheckCircle2, Loader2 } from 'lucide-react';
-import {useAuth} from '@clerk/clerk-react';
+import { PlusCircle, Plus,  Clock, CheckCircle2, Loader2  } from 'lucide-react';
+import {useAuth, useUser} from '@clerk/clerk-react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -14,6 +14,7 @@ const UserDashboard = () => {
   const { getToken, user } = useAuth();
   const navigate = useNavigate();
 
+  
   useEffect(() => {
     const fetchProjects = async () => {
       try {
@@ -36,11 +37,14 @@ const UserDashboard = () => {
     fetchProjects();
   }, [getToken]);
 
+  
+
   const filteredProjects = projects.filter(project => {
     if (activeTab === 'Ongoing') return project.progress < 100;
     if (activeTab === 'Completed') return project.progress === 100;
     return true;
   });
+  
 
   if (loading) {
     return (
@@ -58,7 +62,7 @@ const UserDashboard = () => {
           <div>
             <div className="flex items-center gap-3 mb-1">
               <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-                Welcome back, {user?.firstName || 'Developer'}! 
+                Welcome back, Developer!
               </h1>
             </div>
             <p className="text-slate-500 dark:text-slate-400 text-lg">

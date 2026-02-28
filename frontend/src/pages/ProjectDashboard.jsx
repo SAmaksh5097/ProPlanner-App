@@ -54,7 +54,6 @@ const ProjectDashboard = () => {
   try {
     const token = await getToken();
     
-    // 1. Call the backend
     const response = await axios.patch('http://localhost:5000/projects/toggle-task', {
       projectId: id, // from useParams
       dayNumber,
@@ -63,8 +62,6 @@ const ProjectDashboard = () => {
       headers: { Authorization: `Bearer ${token}` }
     });
 
-    // 2. IMPORTANT: Update the 'project' state with the NEW data from the server
-    // This includes the new progress percentage!
     setProject(response.data); 
     
   } catch (err) {
@@ -81,7 +78,7 @@ const ProjectDashboard = () => {
         <ProjectBanner projectMeta={{
           title: project.title,
           daysRemaining: Math.ceil((new Date(project.deadline) - new Date()) / (1000*60*60*24)),
-          progress: project.progress
+          progress: project.progress,
         }} />
 
         <div className="mt-10">
