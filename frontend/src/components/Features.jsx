@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'motion/react';
 
 const featuresData = [
   {
@@ -33,44 +34,65 @@ const featuresData = [
   },
 ];
 
+const cardVariants = {
+  hidden: { opacity: 0, y: 40 },
+  visible: (i) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: i * 0.2, duration: 0.6, ease: 'easeOut' },
+  }),
+};
+
 const Features = () => {
   return (
     <section  
       id="features" 
-      className="min-h-screen w-full flex flex-col justify-center py-20 bg-white dark:bg-slate-950 transition-colors duration-300"
+      className="min-h-screen w-full flex flex-col justify-center py-12 sm:py-20 bg-brand-light dark:bg-brand-dark transition-colors duration-300"
     >
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-16">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white mb-4 tracking-tight">
-            Streamline Your Workflow
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.6 }}
+          className="text-center max-w-2xl mx-auto mb-16"
+        >
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-brand-dark dark:text-brand-light mb-4 tracking-tight">
+            Streamline Your <span className="text-brand-accent">Workflow</span>
           </h2>
-          <p className="text-lg text-slate-600 dark:text-slate-400">
+          <p className="text-lg text-brand-dark/60 dark:text-brand-muted">
             Everything you need to move from idea to execution without the overwhelm.
           </p>
-        </div>
+        </motion.div>
 
         {/* Features Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {featuresData.map((feature) => (
-            <div 
-              key={feature.id} 
-              className="p-8 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800 hover:border-blue-100 dark:hover:border-blue-900/50 transition-colors duration-300"
+          {featuresData.map((feature, i) => (
+            <motion.div 
+              key={feature.id}
+              custom={i}
+              variants={cardVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: '-50px' }}
+              whileHover={{ y: -8, transition: { duration: 0.3 } }}
+              className="p-5 sm:p-8 rounded-2xl bg-white dark:bg-brand-surface-dark border border-brand-muted/20 dark:border-brand-muted/10 hover:border-brand-accent/40 dark:hover:border-brand-accent/30 transition-colors duration-300 shadow-sm hover:shadow-lg hover:shadow-brand-accent/10"
             >
               {/* Icon Container */}
-              <div className="w-12 h-12 rounded-xl bg-blue-100/50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-6">
+              <div className="w-12 h-12 rounded-xl bg-brand-accent/10 dark:bg-brand-accent/15 text-brand-accent flex items-center justify-center mb-6">
                 {feature.icon}
               </div>
               
               {/* Card Text */}
-              <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">
+              <h3 className="text-xl font-bold text-brand-dark dark:text-brand-light mb-3">
                 {feature.title}
               </h3>
-              <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
+              <p className="text-brand-dark/60 dark:text-brand-muted leading-relaxed">
                 {feature.description}
               </p>
-            </div>
+            </motion.div>
           ))}
         </div>
 

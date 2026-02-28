@@ -1,14 +1,14 @@
 import React from 'react'
+import AnimatedBackground from '../components/AnimatedBackground'
 import HeroSection from '../components/HeroSection'
 import Features from '../components/Features'
 
 const Home = () => {
   return (
-    <div>
+    <AnimatedBackground>
       <HeroSection/>
       <Features/>
-      
-    </div>
+    </AnimatedBackground>
   )
 }
 

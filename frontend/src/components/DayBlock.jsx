@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import TaskItem from './TaskItem';
 
 const DayBlock = ({ dayData }) => {
@@ -7,19 +8,19 @@ const DayBlock = ({ dayData }) => {
   // Status-based styling maps
   const styles = {
     active: {
-      badgeBg: 'bg-emerald-100 dark:bg-emerald-900/30',
-      badgeText: 'text-emerald-700 dark:text-emerald-400',
-      titleText: 'text-slate-900 dark:text-white',
+      badgeBg: 'bg-brand-accent/15',
+      badgeText: 'text-brand-accent',
+      titleText: 'text-brand-dark dark:text-brand-light',
     },
     upcoming: {
-      badgeBg: 'bg-blue-100 dark:bg-blue-900/30',
-      badgeText: 'text-blue-700 dark:text-blue-400',
-      titleText: 'text-slate-900 dark:text-white',
+      badgeBg: 'bg-brand-muted/20',
+      badgeText: 'text-brand-dark dark:text-brand-muted',
+      titleText: 'text-brand-dark dark:text-brand-light',
     },
     past: {
-      badgeBg: 'bg-slate-100 dark:bg-slate-800',
-      badgeText: 'text-slate-400 dark:text-slate-500',
-      titleText: 'text-slate-400 dark:text-slate-500',
+      badgeBg: 'bg-brand-light dark:bg-brand-card-dark',
+      badgeText: 'text-brand-muted',
+      titleText: 'text-brand-muted',
     }
   };
 
@@ -27,11 +28,16 @@ const DayBlock = ({ dayData }) => {
   const taskCount = dayData.tasks.length;
 
   return (
-    <div className={`mb-4 rounded-2xl border transition-colors duration-300 ${
-      isOpen 
-        ? 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 shadow-sm' 
-        : 'bg-white/60 dark:bg-slate-900/60 border-slate-100 dark:border-slate-800 hover:border-slate-200 dark:hover:border-slate-700'
-    }`}>
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className={`mb-4 rounded-2xl border transition-colors duration-300 ${
+        isOpen 
+          ? 'bg-white dark:bg-brand-surface-dark border-brand-muted/30 dark:border-brand-muted/15 shadow-sm' 
+          : 'bg-white/60 dark:bg-brand-surface-dark/60 border-brand-muted/15 dark:border-brand-muted/10 hover:border-brand-muted/30 dark:hover:border-brand-muted/20'
+      }`}
+    >
       
       {/* Accordion Header */}
       <button 
@@ -46,7 +52,7 @@ const DayBlock = ({ dayData }) => {
             <h3 className={`text-xl font-bold mb-1 ${currentStyle.titleText}`}>
               Day {dayData.dayNumber}
             </h3>
-            <p className="text-sm font-medium text-slate-500 dark:text-slate-500">
+            <p className="text-sm font-medium text-brand-muted">
               {dayData.date}
             </p>
           </div>
@@ -54,35 +60,52 @@ const DayBlock = ({ dayData }) => {
 
         <div className="flex items-center gap-4">
           {!isOpen && taskCount > 0 && (
-            <span className="hidden sm:inline-flex items-center px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-xs font-bold text-slate-500 dark:text-slate-400">
+            <span className="hidden sm:inline-flex items-center px-2.5 py-1 rounded-full bg-brand-light dark:bg-brand-card-dark text-xs font-bold text-brand-muted">
               {taskCount} tasks
             </span>
           )}
-          <svg 
-            className={`w-5 h-5 text-slate-400 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} 
+          <motion.svg 
+            animate={{ rotate: isOpen ? 180 : 0 }}
+            transition={{ duration: 0.3 }}
+            className="w-5 h-5 text-brand-muted" 
             fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
           >
             <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-          </svg>
+          </motion.svg>
         </div>
       </button>
 
       {/* Accordion Body */}
-      {isOpen && taskCount > 0 && (
-        <div className="p-2 sm:p-4 border-t border-slate-100 dark:border-slate-800">
-          <div className="space-y-1">
-            {dayData.tasks.map(task => (
-              <TaskItem key={task.id} task={task} />
-            ))}
-          </div>
-        </div>
-      )}
-      {isOpen && taskCount === 0 && (
-        <div className="p-6 text-center border-t border-slate-100 dark:border-slate-800 text-slate-500 dark:text-slate-400">
-          No tasks scheduled for this day.
-        </div>
-      )}
-    </div>
+      <AnimatePresence>
+        {isOpen && taskCount > 0 && (
+          <motion.div 
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="overflow-hidden"
+          >
+            <div className="p-2 sm:p-4 border-t border-brand-muted/15 dark:border-brand-muted/10">
+              <div className="space-y-1">
+                {dayData.tasks.map(task => (
+                  <TaskItem key={task.id} task={task} />
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        )}
+        {isOpen && taskCount === 0 && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="p-6 text-center border-t border-brand-muted/15 dark:border-brand-muted/10 text-brand-muted"
+          >
+            No tasks scheduled for this day.
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
   );
 };
 

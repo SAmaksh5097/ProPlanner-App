@@ -24,7 +24,7 @@ const ProtectedRoute = ({ children }) => {
 
 const App = () => {
   return (
-    <div className='bg-gray-100 min-h-screen w-full flex flex-col dark:bg-gray-900 dark:text-white transition-colors duration-300'>
+    <div className='bg-brand-light min-h-screen w-full flex flex-col dark:bg-brand-dark dark:text-brand-light transition-colors duration-300'>
       
       <Navbar />
       

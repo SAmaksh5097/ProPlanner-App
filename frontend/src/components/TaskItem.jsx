@@ -1,38 +1,46 @@
 import React from 'react';
+import { motion } from 'motion/react';
 import { Clock, Check } from 'lucide-react';
 
 const TaskItem = ({ task, onToggle }) => {
   return (
-    <div 
-      onClick={onToggle} // Clicking the whole row toggles the task
-      className="flex items-start gap-4 p-3 sm:p-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 rounded-xl transition-colors group cursor-pointer"
+    <motion.div 
+      onClick={onToggle}
+      whileHover={{ x: 4 }}
+      whileTap={{ scale: 0.98 }}
+      transition={{ duration: 0.2 }}
+      className="flex items-start gap-4 p-3 sm:p-4 hover:bg-brand-light/60 dark:hover:bg-brand-card-dark/50 rounded-xl transition-colors group cursor-pointer"
     >
       {/* Custom Checkbox Design */}
       <div className="pt-0.5">
-        <div className={`w-6 h-6 rounded-md border flex items-center justify-center transition-all ${
-          task.completed 
-          ? 'bg-blue-600 border-blue-600' 
-          : 'border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800'
-        }`}>
+        <motion.div 
+          animate={task.completed ? { scale: [1, 1.2, 1] } : {}}
+          transition={{ duration: 0.3 }}
+          className={`w-6 h-6 rounded-md border flex items-center justify-center transition-all ${
+            task.completed 
+            ? 'bg-brand-accent border-brand-accent' 
+            : 'border-brand-muted/50 dark:border-brand-muted/30 bg-white dark:bg-brand-card-dark'
+          }`}
+        >
           {task.completed && <Check className="w-4 h-4 text-white" strokeWidth={3} />}
-        </div>
+        </motion.div>
       </div>
       
       {/* Task Content */}
       <div className="flex-1">
         <h4 className={`text-base font-medium transition-all ${
           task.completed 
-          ? 'text-slate-400 dark:text-slate-500 line-through' 
-          : 'text-slate-900 dark:text-white'
+          ? 'text-brand-muted line-through' 
+          : 'text-brand-dark dark:text-brand-light'
         }`}>
           {task.title}
         </h4>
-        <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 font-medium">
+        <div className="flex items-center gap-2 text-sm text-brand-muted font-medium">
           <Clock className='w-4 h-4'/>
-          {task.timeEstimate || task.time} {/* Using the backend key name */}
+          {task.timeEstimate || task.time}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
