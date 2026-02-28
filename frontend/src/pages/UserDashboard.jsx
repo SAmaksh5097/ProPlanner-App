@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
+import { motion } from 'motion/react';
 import ProjectCard from '../components/ProjectCard';
 import { Link } from 'react-router-dom';
-import { PlusCircle, Plus,  Clock, CheckCircle2, Loader2  } from 'lucide-react';
+import { PlusCircle, Plus, Clock, CheckCircle2, Loader2 } from 'lucide-react';
 import {useAuth, useUser} from '@clerk/clerk-react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -19,7 +20,6 @@ const UserDashboard = () => {
     const fetchProjects = async () => {
       try {
         const token = await getToken();
-        // Updated to the standard route we used in the backend
         const response = await axios.get('http://localhost:5000/projects/my-projects', {
           headers: { Authorization: `Bearer ${token}` }
         });
@@ -48,37 +48,51 @@ const UserDashboard = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-slate-50 dark:bg-slate-950">
-        <Loader2 className="animate-spin text-blue-600" size={48} />
+      <div className="flex items-center justify-center min-h-screen bg-brand-light dark:bg-brand-dark">
+        <Loader2 className="animate-spin text-brand-accent" size={48} />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pt-10 pb-20 transition-colors duration-300">
+    <div className="min-h-screen bg-brand-light dark:bg-brand-dark pt-10 pb-20 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8"
+        >
           <div>
             <div className="flex items-center gap-3 mb-1">
-              <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+              <h1 className="text-3xl font-extrabold text-brand-dark dark:text-brand-light tracking-tight">
                 Welcome back, Developer!
               </h1>
             </div>
-            <p className="text-slate-500 dark:text-slate-400 text-lg">
+            <p className="text-brand-muted dark:text-brand-muted text-lg">
               Manage your AI-generated development pipelines.
             </p>
           </div>
           
           <Link to='/create-project'>
-            <button className='flex gap-2 items-center bg-blue-600 text-white px-5 py-3 rounded-xl hover:bg-blue-700 shadow-lg shadow-blue-500/30 font-bold transition-all active:scale-95'>
+            <motion.button 
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className='flex gap-2 items-center bg-brand-accent text-white px-5 py-3 rounded-xl hover:bg-brand-accent-hover shadow-lg shadow-brand-accent/30 font-bold transition-all'
+            >
               <Plus size={20}/>
               <span>Start New Project</span>
-            </button>
+            </motion.button>
           </Link>
-        </div>
+        </motion.div>
 
-        <div className="border-b border-slate-200 dark:border-slate-800 mb-8 flex justify-between items-center">
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2, duration: 0.4 }}
+          className="border-b border-brand-muted/30 dark:border-brand-muted/10 mb-8 flex justify-between items-center"
+        >
           <nav className="flex space-x-8">
             {['Ongoing', 'Completed'].map((tab) => (
               <button
@@ -86,8 +100,8 @@ const UserDashboard = () => {
                 onClick={() => setActiveTab(tab)}
                 className={`pb-4 px-1 border-b-2 font-bold text-sm flex items-center transition-all ${
                   activeTab === tab
-                    ? 'border-blue-600 text-blue-600 dark:text-blue-400 dark:border-blue-500'
-                    : 'border-transparent text-slate-500 hover:text-slate-700'
+                    ? 'border-brand-accent text-brand-accent'
+                    : 'border-transparent text-brand-muted hover:text-brand-dark dark:hover:text-brand-light'
                 }`}
               >
                 {tab === 'Ongoing' ? (
@@ -99,27 +113,38 @@ const UserDashboard = () => {
               </button>
             ))}
           </nav>
-          <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+          <span className="text-xs font-bold text-brand-muted uppercase tracking-widest">
             {filteredProjects.length} Projects
           </span>
-        </div>
+        </motion.div>
 
         {/* Projects Grid */}
         {filteredProjects.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-20 bg-white dark:bg-slate-900 rounded-[2.5rem] border border-slate-100 dark:border-slate-800">
-             <div className="p-4 bg-slate-50 dark:bg-slate-800 rounded-full mb-4 text-slate-300">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.4 }}
+            className="flex flex-col items-center justify-center py-20 bg-white dark:bg-brand-surface-dark rounded-[2.5rem] border border-brand-muted/20 dark:border-brand-muted/10"
+          >
+             <div className="p-4 bg-brand-light dark:bg-brand-card-dark rounded-full mb-4 text-brand-muted">
                 <PlusCircle size={40} />
              </div>
-             <p className="text-slate-500 font-medium">No {activeTab.toLowerCase()} projects found.</p>
-          </div>
+             <p className="text-brand-muted font-medium">No {activeTab.toLowerCase()} projects found.</p>
+          </motion.div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredProjects?.map((project) => (
-              <ProjectCard 
-                key={project._id} 
-                project={project} 
-                onClick={() => navigate(`/project-dashboard/${project._id}`)} 
-              />
+            {filteredProjects?.map((project, i) => (
+              <motion.div
+                key={project._id}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1, duration: 0.4 }}
+              >
+                <ProjectCard 
+                  project={project} 
+                  onClick={() => navigate(`/project-dashboard/${project._id}`)} 
+                />
+              </motion.div>
             ))}
           </div>
         )}

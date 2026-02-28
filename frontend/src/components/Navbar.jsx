@@ -1,4 +1,5 @@
 import { LaptopMinimalCheck } from 'lucide-react'
+import { motion } from 'motion/react'
 import ThemeToggle from './ThemeToggle'
 import { SignInButton, SignUpButton, UserButton } from '@clerk/clerk-react'
 import { Link } from 'react-router-dom'
@@ -8,26 +9,34 @@ const Navbar = () => {
     const { user, loading } = useCustomUser();
 
     return (
-        <div className='w-full text-black bg-gray-100 flex items-center justify-between shadow-xl p-4 dark:bg-gray-800 dark:text-white transition-colors duration-300'>
+        <motion.div 
+            initial={{ y: -60, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.5, ease: 'easeOut' }}
+            className='w-full text-brand-dark bg-brand-light flex items-center justify-between shadow-xl p-4 dark:bg-brand-dark dark:text-brand-light transition-colors duration-300 border-b border-brand-muted/30 dark:border-brand-muted/10'
+        >
             
             <Link to={'/'}>
-                <div className='flex gap-2 text-2xl font-bold items-center hover:opacity-80 transition-opacity'>
-                    <LaptopMinimalCheck className='w-10 h-10' />
+                <motion.div 
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className='flex gap-2 text-2xl font-bold items-center'
+                >
+                    <LaptopMinimalCheck className='w-10 h-10 text-brand-accent' />
                     <h1>ProPlanner</h1>
-                </div>
+                </motion.div>
             </Link>
 
             <div>
                 <ul className='flex gap-6 font-medium items-center '>
                     <li>
-                        <a href="#features" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                        <a href="#features" className="hover:text-brand-accent transition-colors">
                             Features
                         </a>
                     </li>
-                    {/* Conditionally render Dashboard link ONLY if user is logged in */}
                     {user && (
                         <li>
-                            <Link to={'/user-dashboard'} className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                            <Link to={'/user-dashboard'} className="hover:text-brand-accent transition-colors">
                                 Dashboard
                             </Link>
                         </li>
@@ -38,30 +47,34 @@ const Navbar = () => {
             <div className='flex gap-4 items-center'>
                 <ThemeToggle />
                 
-                {/* Conditional Rendering based on Context */}
                 {loading ? (
-                    // 1. Loading State (Prevents layout shift while Clerk checks auth)
-                    <div className="w-8 h-8 rounded-full bg-gray-300 dark:bg-gray-600 animate-pulse"></div>
+                    <div className="w-8 h-8 rounded-full bg-brand-muted/50 dark:bg-brand-muted/20 animate-pulse"></div>
                 ) : user ? (
-                    // 2. Logged In State (Shows Clerk Profile Dropdown)
                     <UserButton afterSignOutUrl="/" />
                 ) : (
-                    // 3. Logged Out State (Shows Sign In / Sign Up)
                     <>
                         <SignInButton mode="modal">
-                            <button className='text-black px-4 py-2 rounded-md hover:bg-gray-200 cursor-pointer dark:text-white dark:hover:bg-gray-700 font-medium transition-colors'>
+                            <motion.button 
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                className='text-brand-dark px-4 py-2 rounded-md hover:bg-brand-muted/30 cursor-pointer dark:text-brand-light dark:hover:bg-brand-muted/10 font-medium transition-colors'
+                            >
                                 Login
-                            </button>
+                            </motion.button>
                         </SignInButton>
                         <SignUpButton mode="modal">
-                            <button className='bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 cursor-pointer dark:bg-blue-600 dark:hover:bg-blue-700 font-medium transition-colors'>
+                            <motion.button 
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                className='bg-brand-accent text-white px-4 py-2 rounded-md hover:bg-brand-accent-hover cursor-pointer font-medium transition-colors'
+                            >
                                 Sign Up
-                            </button>
+                            </motion.button>
                         </SignUpButton>
                     </>
                 )}
             </div>
-        </div>
+        </motion.div>
     )
 }
 

@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { motion } from 'motion/react';
 import { 
   Type, 
   FileText, 
@@ -103,24 +104,33 @@ const CreateProject = () => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col items-center pt-12 pb-24 px-4 sm:px-6 lg:px-8 transition-colors duration-300">
+    <div className="min-h-screen bg-brand-light dark:bg-brand-dark flex flex-col items-center pt-12 pb-24 px-4 sm:px-6 lg:px-8 transition-colors duration-300">
       
-      <div className="w-full max-w-2xl bg-white dark:bg-slate-900 rounded-[2rem] shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-slate-800 overflow-hidden transition-colors duration-300">
+      <motion.div 
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: 'easeOut' }}
+        className="w-full max-w-2xl bg-white dark:bg-brand-surface-dark rounded-[2rem] shadow-xl shadow-brand-dark/5 dark:shadow-none border border-brand-muted/20 dark:border-brand-muted/10 overflow-hidden transition-colors duration-300"
+      >
         
-        <div className="bg-gradient-to-b from-blue-50/80 to-white dark:from-blue-900/20 dark:to-slate-900 p-8 sm:p-10 pb-6 transition-colors duration-300">
-          <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-2 tracking-tight transition-colors">
+        <div className="bg-gradient-to-b from-brand-accent/10 to-white dark:from-brand-accent/5 dark:to-brand-surface-dark p-8 sm:p-10 pb-6 transition-colors duration-300">
+          <h2 className="text-3xl font-extrabold text-brand-dark dark:text-brand-light mb-2 tracking-tight transition-colors">
             Create New Project
           </h2>
-          <p className="text-slate-500 dark:text-slate-400 font-medium transition-colors">
+          <p className="text-brand-muted font-medium transition-colors">
             Transform your vision into a structured roadmap.
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="p-8 sm:p-10 pt-4 space-y-6">
           
-          <div>
-            <label className="flex items-center text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 transition-colors">
-              <Type className="w-4 h-4 mr-2 text-slate-400 dark:text-slate-500" />
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.1, duration: 0.4 }}
+          >
+            <label className="flex items-center text-sm font-bold text-brand-dark dark:text-brand-muted mb-2 transition-colors">
+              <Type className="w-4 h-4 mr-2 text-brand-accent" />
               Project Title
             </label>
             <input
@@ -129,14 +139,18 @@ const CreateProject = () => {
               value={formData.title}
               onChange={handleChange}
               placeholder="e.g. E-commerce Platform Redesign"
-              className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/50 px-4 py-3.5 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder:text-slate-400 dark:placeholder:text-slate-500"
+              className="w-full rounded-xl border border-brand-muted/30 dark:border-brand-muted/15 bg-white dark:bg-brand-card-dark px-4 py-3.5 text-brand-dark dark:text-brand-light focus:ring-2 focus:ring-brand-accent focus:border-brand-accent outline-none transition-all placeholder:text-brand-muted/60"
               required
             />
-          </div>
+          </motion.div>
 
-          <div>
-            <label className="flex items-center text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 transition-colors">
-              <FileText className="w-4 h-4 mr-2 text-slate-400 dark:text-slate-500" />
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.2, duration: 0.4 }}
+          >
+            <label className="flex items-center text-sm font-bold text-brand-dark dark:text-brand-muted mb-2 transition-colors">
+              <FileText className="w-4 h-4 mr-2 text-brand-accent" />
               Project Description
             </label>
             <textarea
@@ -145,46 +159,56 @@ const CreateProject = () => {
               onChange={handleChange}
               placeholder="What are the main goals and features of this project?"
               rows="4"
-              className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/50 px-4 py-3.5 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder:text-slate-400 dark:placeholder:text-slate-500 resize-none"
+              className="w-full rounded-xl border border-brand-muted/30 dark:border-brand-muted/15 bg-white dark:bg-brand-card-dark px-4 py-3.5 text-brand-dark dark:text-brand-light focus:ring-2 focus:ring-brand-accent focus:border-brand-accent outline-none transition-all placeholder:text-brand-muted/60 resize-none"
               required
             ></textarea>
-          </div>
+          </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.3, duration: 0.4 }}
+            className="grid grid-cols-1 md:grid-cols-2 gap-6"
+          >
             
             <div className="relative" ref={dropdownRef}>
-              <label className="flex items-center text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 transition-colors">
-                <Terminal className="w-4 h-4 mr-2 text-slate-400 dark:text-slate-500" />
+              <label className="flex items-center text-sm font-bold text-brand-dark dark:text-brand-muted mb-2 transition-colors">
+                <Terminal className="w-4 h-4 mr-2 text-brand-accent" />
                 Tech Stack
               </label>
               
               <div 
                 onClick={() => setIsTechMenuOpen(!isTechMenuOpen)}
-                className={`w-full min-h-[52px] rounded-xl border ${isTechMenuOpen ? 'border-blue-500 ring-2 ring-blue-500/20' : 'border-slate-200 dark:border-slate-700'} bg-white dark:bg-slate-800/50 px-3 py-2 text-slate-900 dark:text-white flex flex-wrap items-center gap-2 cursor-pointer transition-all`}
+                className={`w-full min-h-[52px] rounded-xl border ${isTechMenuOpen ? 'border-brand-accent ring-2 ring-brand-accent/20' : 'border-brand-muted/30 dark:border-brand-muted/15'} bg-white dark:bg-brand-card-dark px-3 py-2 text-brand-dark dark:text-brand-light flex flex-wrap items-center gap-2 cursor-pointer transition-all`}
               >
                 {formData.techStack.length === 0 ? (
-                  <span className="text-slate-400 dark:text-slate-500 px-1 py-1.5">Select technologies...</span>
+                  <span className="text-brand-muted/60 px-1 py-1.5">Select technologies...</span>
                 ) : (
                   formData.techStack.map(tech => (
-                    <span key={tech} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 text-sm font-medium">
+                    <span key={tech} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-brand-accent/15 text-brand-accent text-sm font-medium">
                       {tech}
                       <X 
-                        className="w-3 h-3 hover:text-blue-900 dark:hover:text-blue-100 cursor-pointer" 
+                        className="w-3 h-3 hover:text-brand-accent-hover cursor-pointer" 
                         onClick={(e) => { e.stopPropagation(); toggleTech(tech); }}
                       />
                     </span>
                   ))
                 )}
-                <div className="ml-auto text-slate-400 dark:text-slate-500 pr-1">
+                <div className="ml-auto text-brand-muted pr-1">
                   <ChevronDown className={`w-4 h-4 transition-transform ${isTechMenuOpen ? 'rotate-180' : ''}`} />
                 </div>
               </div>
 
               {isTechMenuOpen && (
-                <div className="absolute z-10 top-full mt-2 w-full max-h-80 overflow-y-auto rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-xl shadow-slate-200/50 dark:shadow-none p-2 animate-in fade-in slide-in-from-top-2 duration-200">
+                <motion.div 
+                  initial={{ opacity: 0, y: -8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="absolute z-10 top-full mt-2 w-full max-h-80 overflow-y-auto rounded-xl bg-white dark:bg-brand-card-dark border border-brand-muted/30 dark:border-brand-muted/15 shadow-xl shadow-brand-dark/10 dark:shadow-none p-2"
+                >
                   {Object.entries(techCategories).map(([category, techs]) => (
                     <div key={category} className="mb-2 last:mb-0">
-                      <div className="px-3 py-1.5 text-xs font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase">
+                      <div className="px-3 py-1.5 text-xs font-bold tracking-wider text-brand-muted uppercase">
                         {category}
                       </div>
                       <div className="space-y-0.5">
@@ -196,8 +220,8 @@ const CreateProject = () => {
                               onClick={() => toggleTech(tech)}
                               className={`flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer text-sm font-medium transition-colors ${
                                 isSelected 
-                                  ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400' 
-                                  : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700/50'
+                                  ? 'bg-brand-accent/10 text-brand-accent' 
+                                  : 'text-brand-dark dark:text-brand-muted hover:bg-brand-light dark:hover:bg-brand-surface-dark'
                               }`}
                             >
                               {tech}
@@ -208,13 +232,13 @@ const CreateProject = () => {
                       </div>
                     </div>
                   ))}
-                </div>
+                </motion.div>
               )}
             </div>
 
             <div>
-              <label className="flex items-center text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 transition-colors">
-                <Calendar className="w-4 h-4 mr-2 text-slate-400 dark:text-slate-500" />
+              <label className="flex items-center text-sm font-bold text-brand-dark dark:text-brand-muted mb-2 transition-colors">
+                <Calendar className="w-4 h-4 mr-2 text-brand-accent" />
                 Deadline
               </label>
               <input
@@ -222,33 +246,40 @@ const CreateProject = () => {
                 name="deadline"
                 value={formData.deadline}
                 onChange={handleChange}
-                className="w-full h-[52px] rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/50 px-4 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                className="w-full h-[52px] rounded-xl border border-brand-muted/30 dark:border-brand-muted/15 bg-white dark:bg-brand-card-dark px-4 text-brand-dark dark:text-brand-light focus:ring-2 focus:ring-brand-accent focus:border-brand-accent outline-none transition-all"
                 required
               />
             </div>
-          </div>
+          </motion.div>
 
-          <div className="pt-4">
-            <button
+          <motion.div 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.4 }}
+            className="pt-4"
+          >
+            <motion.button
               type="submit"
-              className="w-full py-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-lg flex items-center justify-center gap-2 shadow-lg shadow-blue-500/30 transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+              whileHover={{ scale: 1.02, boxShadow: '0 10px 40px rgba(255, 155, 81, 0.3)' }}
+              whileTap={{ scale: 0.98 }}
+              className="w-full py-4 rounded-xl bg-brand-accent hover:bg-brand-accent-hover text-white font-bold text-lg flex items-center justify-center gap-2 shadow-lg shadow-brand-accent/30 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={formData.techStack.length === 0 || !formData.title || !formData.deadline}
             >
               {loading? (
                 <>
-                  <Loader2 className="w-5 h-5 text-blue-200 fill-current animate-spin" />
+                  <Loader2 className="w-5 h-5 text-white/70 fill-current animate-spin" />
                   Generating...
                 </>
               ):(
                 <>
-                  <Zap className="w-5 h-5 text-blue-200 fill-current" />
+                  <Zap className="w-5 h-5 text-white/70 fill-current" />
                   Generate Plan
                 </>
               )}
-            </button>
-          </div>
+            </motion.button>
+          </motion.div>
         </form>
-      </div>
+      </motion.div>
 
       
     </div>
