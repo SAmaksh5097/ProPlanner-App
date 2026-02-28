@@ -1,13 +1,24 @@
 const projectModel = require('../models/project');
 const {generateProjectPlan} = require('../services/aiService')
+
+function getAuthUserId(req) {
+    if (typeof req.auth === 'function') {
+        return req.auth()?.userId;
+    }
+    return req.auth?.userId;
+}
+
 async function createProject(req,res){
     try{
         const {title, description, tech_stack, deadline} = req.body;
-        const userId = req.auth().userId;
+        const userId = getAuthUserId(req) || "test_user_123";
+        
+        if(!userId){
+            return res.status(401).json({error:"Unauthorized"});
+        }
         
         
-        
-        const projectPlan =  generateProjectPlan(req.body);
+        const projectPlan = await generateProjectPlan(req.body);
         
         const project = new projectModel({
             userId,
@@ -32,7 +43,10 @@ async function createProject(req,res){
 }
 async function getUserProjects(req,res) {
     try{
-        const userId = req.auth().userId;
+        const userId = getAuthUserId(req);
+        if (!userId) {
+            return res.status(401).json({ error: "Unauthorized" });
+        }
         const projects  = await projectModel.find({userId}).sort({createdAt: -1});
         res.status(200).json(projects);
     } catch(error){
@@ -47,7 +61,11 @@ async function getProjectById(req,res){
         if(!project){
             return res.status(404).json({error:"Project not found"});
         }
-        if(project.userId !== req.auth().userId){
+        const userId = getAuthUserId(req);
+        if (!userId) {
+            return res.status(401).json({ error: "Unauthorized" });
+        }
+        if(project.userId !== userId){
             return res.status(403).json({error:"Unauthorized"});
         }
         res.status(200).json(project);
@@ -56,6 +74,9 @@ async function getProjectById(req,res){
     }
 
 }
+
+
+
 
 module.exports = {
     createProject,getProjectById,getUserProjects

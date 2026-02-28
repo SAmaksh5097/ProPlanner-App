@@ -1,84 +1,46 @@
-const {GoogleGenerativeAI} = require('@google/generative-ai');
-const dotenv = require('dotenv');
-dotenv.config();
+const { GoogleGenAI } = require("@google/genai");
 
-const genAI = new GoogleGenerativeAI({
-  apiKey: process.env.GEMINI_API_KEY,
-});
+// Initialize the new SDK
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
-/**
- * Calls the Gemini API to generate a structured daily project plan.
- * @param {Object} projectData - Contains title, description, techStack, and deadline
- * @returns {Array} - An array of Day objects containing Tasks
- */
 const generateProjectPlan = async (projectData) => {
     try {
         const { title, description, tech_stack, deadline } = projectData;
 
-        // Calculate roughly how many days we have until the deadline
+        // Calculate days
         const daysUntilDeadline = Math.ceil((new Date(deadline) - new Date()) / (1000 * 60 * 60 * 24));
-        const plannedDays = daysUntilDeadline > 0 ? daysUntilDeadline : 7; // Default to 7 days if deadline is weird
-        const techStackArray = Array.isArray(tech_stack) ? tech_stack : [tech_stack];
-        
-        // We use gemini-1.5-flash because it is incredibly fast and great at JSON tasks
-        const model = genAI.getGenerativeModel({ 
-            model: "gemini-1.5-flash",
-            // This is the magic config that forces Gemini to output pure JSON
-            generationConfig: {
-                responseMimeType: "application/json",
-            }
-        });
+        const plannedDays = daysUntilDeadline > 0 ? daysUntilDeadline : 7;
 
-        // The System Prompt: Telling Gemini exactly what we want and how to format it
-        const prompt = `
-            You are an expert technical project manager and senior software engineer. 
-            I need you to break down a project into a structured, day-by-day execution plan.
+        // Use the model string that worked in your test
+        const response = await ai.models.generateContent({
+            model: "gemini-3-flash-preview",
+            contents: `
+                You are a senior project manager. 
+                Project: ${title}
+                Description: ${description}
+                Tech: ${tech_stack}
+                Duration: ${plannedDays} days
 
-            Project Title: ${title}
-            Description: ${description}
-            Tech Stack: ${techStackArray.join(', ')}
-            Total Days Available: ${plannedDays}
-
-            Instructions:
-            1. Create a logical, sequential daily roadmap for this project.
-            2. Break the work down across the total days available.
-            3. For each day, provide 2 to 5 actionable, specific tasks.
-            4. Assign a realistic time estimate to each task (e.g., "1.5 hrs", "45 mins").
-            5. Return the response STRICTLY as a JSON array of objects matching the exact structure below.
-
-            Return strict JSON in exact format....do not skip any fields:
-            [
-              {
-                "dayNumber": 1,
-                "tasks": [
+                Create a daily roadmap. Return ONLY a JSON array with this structure:
+                [
                   {
-                    "title": "Set up GitHub repo and initialize project",
-                    "timeEstimate": "1 hr"
-                  },
-                  {
-                    "title": "Configure database connection",
-                    "timeEstimate": "45 mins"
+                    "dayNumber": 1,
+                    "tasks": [
+                      { "title": "Task name", "timeEstimate": "1hr", "completed": false }
+                    ]
                   }
                 ]
-              }
-            ]
-        `;
+            `,
+        });
 
-        // Send the prompt to Gemini
-        const result = await model.generateContent(prompt);
-        const responseText = result.response.text();
-
-        // Because we used responseMimeType: "application/json", we can safely parse this directly
-        const parsedPlan = JSON.parse(responseText);
-
-        return parsedPlan;
+        // The new SDK returns response.text (as a string)
+        // We parse it to turn it into an object for MongoDB
+        return JSON.parse(response.text);
 
     } catch (error) {
         console.error("AI Generation Error:", error);
-        throw new Error("Failed to generate project plan from AI");
+        throw new Error("Failed to generate project plan");
     }
 };
 
-module.exports = {
-    generateProjectPlan
-};
+module.exports = { generateProjectPlan };
