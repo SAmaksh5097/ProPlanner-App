@@ -105,6 +105,8 @@ const CreateProject = () => {
       }
     } catch(error){
       console.error("Error creating project",error);
+      const msg = error?.response?.data?.error || error?.message || "Something went wrong";
+      alert(`Failed to create project: ${msg}`);
     } finally{
       setLoading(false);
     }
