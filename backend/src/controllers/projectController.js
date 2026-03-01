@@ -1,5 +1,5 @@
 const projectModel = require('../models/project');
-const {generateProjectPlan} = require('../services/aiService')
+const {generateProjectPlan, rescheduleProjectPlan} = require('../services/aiService')
 
 function getAuthUserId(req) {
     if (typeof req.auth === 'function') {
@@ -123,8 +123,86 @@ async function deleteProject(req,res){
 
 
 
-module.exports = {
-    createProject,getProjectById,getUserProjects, deleteProject, toogleTask
-    
+async function saveProgress(req, res) {
+    try {
+        const { id } = req.params;
+        const { roadmap } = req.body;
+        const userId = getAuthUserId(req);
 
+        if (!userId) return res.status(401).json({ error: "Unauthorized" });
+
+        const project = await projectModel.findOne({ _id: id, userId });
+        if (!project) return res.status(404).json({ error: "Project not found" });
+
+        project.roadmap = roadmap;
+
+        // Recalculate progress
+        const allTasks = roadmap.flatMap(d => d.tasks);
+        const completedCount = allTasks.filter(t => t.completed).length;
+        project.progress = allTasks.length > 0 ? Math.round((completedCount / allTasks.length) * 100) : 0;
+
+        if (project.progress === 100) project.status = 'completed';
+        else if (project.progress > 0) project.status = 'in progress';
+        else project.status = 'pending';
+
+        await project.save();
+        res.json(project);
+    } catch (error) {
+        console.error("Save progress error:", error);
+        res.status(500).json({ error: "Failed to save progress" });
+    }
+}
+
+async function rescheduleProject(req, res) {
+    try {
+        const { id } = req.params;
+        const { title, description, tech_stack, deadline } = req.body;
+        const userId = getAuthUserId(req);
+
+        if (!userId) return res.status(401).json({ error: "Unauthorized" });
+
+        const project = await projectModel.findOne({ _id: id, userId });
+        if (!project) return res.status(404).json({ error: "Project not found" });
+
+        // Update project details
+        if (title) project.title = title;
+        if (description) project.description = description;
+        if (tech_stack) project.tech_stack = tech_stack;
+        if (deadline) project.deadline = deadline;
+
+        // Gather completed task titles
+        const completedTasks = project.roadmap.flatMap(d =>
+            d.tasks.filter(t => t.completed).map(t => t.title)
+        );
+
+        // Generate new plan via AI
+        const newPlan = await rescheduleProjectPlan({
+            title: project.title,
+            description: project.description,
+            tech_stack: project.tech_stack,
+            deadline: project.deadline,
+            completedTasks
+        });
+
+        project.roadmap = newPlan;
+
+        // Recalculate progress
+        const allTasks = newPlan.flatMap(d => d.tasks);
+        const done = allTasks.filter(t => t.completed).length;
+        project.progress = allTasks.length > 0 ? Math.round((done / allTasks.length) * 100) : 0;
+
+        if (project.progress === 100) project.status = 'completed';
+        else if (project.progress > 0) project.status = 'in progress';
+        else project.status = 'pending';
+
+        await project.save();
+        res.json(project);
+    } catch (error) {
+        console.error("Reschedule error:", error);
+        res.status(500).json({ error: "Failed to reschedule project" });
+    }
+}
+
+module.exports = {
+    createProject, getProjectById, getUserProjects, deleteProject, toogleTask, saveProgress, rescheduleProject
 }
