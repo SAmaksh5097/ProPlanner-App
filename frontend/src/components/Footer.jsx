@@ -24,11 +24,11 @@ const Footer = () => {
           </div>
 
           {/* Navigation Links */}
-          <nav className="flex flex-wrap justify-center gap-6 md:gap-8">
+          {/* <nav className="flex flex-wrap justify-center gap-6 md:gap-8">
             <a href="#" className="text-sm font-medium text-brand-muted hover:text-brand-accent dark:text-brand-muted dark:hover:text-brand-accent transition-colors">
               Contact
             </a>
-          </nav>
+          </nav> */}
           
         </div>
 
