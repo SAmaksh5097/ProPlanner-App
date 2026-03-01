@@ -103,7 +103,7 @@ const HeroSection = () => {
 
             {/* Word‑by‑word staggered headline */}
             <AnimatedHeadline
-              text="Plan Like A ProPlanner"
+              text="Plan With ProPlanner"
               accentWord="ProPlanner"
               className="text-3xl sm:text-5xl lg:text-7xl font-extrabold text-brand-dark dark:text-brand-light tracking-tight mb-4 sm:mb-6 leading-tight"
             />
@@ -125,7 +125,7 @@ const HeroSection = () => {
                 {taglines[index]}
               </span>
               <br />
-              No more chaos, just clear, <span className="text-brand-accent font-semibold">AI‑powered</span> plans to ship efficiently.
+              No more chaos, just clear, <span className="text-brand-accent font-semibold">AI‑powered</span> plans to move efficiently.
             </motion.p>
 
             {/* ─── Magnetic Glow Button ─── */}
