@@ -12,7 +12,8 @@ const UserDashboard = () => {
   const [activeTab, setActiveTab] = useState('Ongoing');
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { getToken, user } = useAuth();
+  const { getToken } = useAuth();
+  const { user } = useUser();
   const navigate = useNavigate();
   const API_URL = import.meta.env.VITE_API_URL;
   
@@ -67,7 +68,7 @@ const UserDashboard = () => {
           <div>
             <div className="flex items-center gap-3 mb-1">
               <h1 className="text-2xl sm:text-3xl font-extrabold text-brand-dark dark:text-brand-light tracking-tight">
-                Welcome back, Developer!
+                Welcome back, {user?.firstName || 'Developer'}!
               </h1>
             </div>
             <p className="text-brand-muted dark:text-brand-muted text-lg">

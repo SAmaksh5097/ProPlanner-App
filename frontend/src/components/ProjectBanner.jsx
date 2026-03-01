@@ -4,9 +4,9 @@ import { motion } from 'motion/react';
 import axios from 'axios';
 import { useAuth } from '@clerk/clerk-react';
 import { useNavigate } from 'react-router-dom';
-import { Loader2 } from 'lucide-react';
+import { Loader2, RefreshCw, Trash2  } from 'lucide-react';
 
-const ProjectBanner = ({ projectMeta }) => {
+const ProjectBanner = ({ projectMeta, onReschedule }) => {
   const navigate = useNavigate();
   const {id} = useParams();
   const [loading, setLoading] = React.useState(false);
@@ -75,13 +75,23 @@ const ProjectBanner = ({ projectMeta }) => {
         </div>
         
       </div>
-      <div>
+      <div className="flex gap-3 mt-4">
         <motion.button 
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className="text-white font-medium shadow-md rounded-md p-2 bg-red-600 mt-2 cursor-pointer hover:bg-red-800" 
+          className="text-white font-medium shadow-md rounded-md p-2 bg-brand-accent cursor-pointer hover:bg-brand-accent/80 flex items-center gap-2" 
+          onClick={onReschedule}
+        >
+          <RefreshCw className="w-4 h-4" />
+          Edit & Reschedule
+        </motion.button>
+        <motion.button 
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="text-white font-medium shadow-md rounded-md p-2 bg-red-600 cursor-pointer hover:bg-red-800 flex gap-1 items-center" 
           onClick={handleDelete}
         >
+          <Trash2 className='w-4 h-4'/>
           Delete Project
         </motion.button>
       </div>
