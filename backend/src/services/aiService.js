@@ -14,7 +14,12 @@ const generateProjectPlan = async (projectData) => {
         const response = await ai.models.generateContent({
             model: "gemini-3-flash-preview",
             contents: `
-                You are a senior project manager. 
+                You are an expert technical project manager/planner for a tech firm.
+                Your task is to break down a project into a structured, realistic, day-wise execution plan.
+                Keep the skill level from beginner to intermediate.
+                User must be able to follow the plan without needing to search for additional resources.
+                User must learn how production development works in real life.
+                Ensure correct sequencing (backend before integration, schema before API, etc). 
                 Project: ${title}
                 Description: ${description}
                 Tech: ${tech_stack}
