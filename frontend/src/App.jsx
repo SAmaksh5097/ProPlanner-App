@@ -8,7 +8,7 @@ import Footer from './components/Footer';
 import UserDashboard from './pages/UserDashboard';
 import ProjectDashboard from './pages/ProjectDashboard';
 import CreateProject from './pages/CreateProject';
-
+import {Analytics} from "@vercel/analytics/react";
 const ProtectedRoute = ({ children }) => {
   return (
     <>
@@ -25,7 +25,7 @@ const ProtectedRoute = ({ children }) => {
 const App = () => {
   return (
     <div className='bg-brand-light min-h-screen w-full flex flex-col dark:bg-brand-dark dark:text-brand-light transition-colors duration-300'>
-      
+      <Analytics />
       <Navbar />
       
       <main className='flex-grow'>
